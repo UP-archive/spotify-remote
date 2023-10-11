@@ -4,9 +4,7 @@ async function Middleware(app, exp) {
   app.use(
     session({
       secret: 'dethzMastery198',
-      resave: false,
-      saveUninitialized: true,
-      cookie: { secure: true },
+      saveUninitialized: false,
     })
   )
 }
