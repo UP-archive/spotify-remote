@@ -43,10 +43,12 @@ function IndexPage(session) {
 
         player.addListener("initialization_error", ({ message }) => {
           console.error(message);
+          window.location.replace('/api/auth/logout')
         });
 
         player.addListener("authentication_error", ({ message }) => {
           console.error(message);
+          window.location.replace('/api/auth/logout')
         });
 
         player.addListener("account_error", ({ message }) => {
