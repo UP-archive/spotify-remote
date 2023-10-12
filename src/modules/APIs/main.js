@@ -11,6 +11,11 @@ async function SpotifyMain(app, root) {
     await AuthCallback(req, res, sAPI)
   })
 
+  app.get('/api/auth/logout', async (req, res) => {
+    req.session.destroy()
+    res.redirect('/')
+  })
+
   // Play
 
   // Previous
