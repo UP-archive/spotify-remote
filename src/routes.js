@@ -1,10 +1,17 @@
 const SpotifyMain = require('./modules/APIs/main')
 const sAPI = require('./modules/APIs/client')
-const index = require('./pages/index')
+const IndexPage = require('./pages/index')
+const NoAuth = require('./pages/index_noAuth')
 
 async function Routes(app, root) {
   app.get('/', async (req, res) => {
-    res.send(index)
+    const token = req.session.spotifyAccount
+
+    if (token === undefined) {
+      res.send(NoAuth)
+    } else {
+      res.send(IndexPage(token['access_token']))
+    }
   })
 
   app.get('/user', async (req, res) => {
