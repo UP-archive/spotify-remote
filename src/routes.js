@@ -3,7 +3,7 @@ const sAPI = require('./modules/APIs/client')
 const IndexPage = require('./pages/index')
 const NoAuth = require('./pages/index_noAuth')
 
-async function Routes(app, root) {
+async function Routes(app, root, io) {
   app.get('/', async (req, res) => {
     const token = req.session.spotifyAccount
 
@@ -25,7 +25,7 @@ async function Routes(app, root) {
     }
   })
 
-  await SpotifyMain(app, root)
+  await SpotifyMain(app, root, io)
 }
 
 module.exports = Routes

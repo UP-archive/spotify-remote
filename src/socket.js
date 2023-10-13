@@ -5,7 +5,7 @@ async function SocketWare(Server, server) {
 
   io.on('connection', (socket) => {
     console.log('')
-    console.log('| Socket connected' + DateLine)
+    console.log('| Socket connected -- ' + DateLine)
   })
 }
 

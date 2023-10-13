@@ -273,6 +273,27 @@ function IndexPage(session) {
         player.connect();
       };
     </script>
+
+    <script type="module">
+      import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+
+      const socket = io();
+
+      socket.on("spotify_play", (arg, callback) => {
+        player.togglePlay();
+        callback('Toggle playing state')
+      });
+
+      socket.on('spotify_prev', (arg, callback) => {
+        player.previousTrack()
+        callback('Previous track')
+      })
+
+      socket.on('spotify_next', (arg, callback) => {
+        player.nextTrack()
+        callback('Next track')
+      })
+    </script>
   </body>
 </html>
 `
