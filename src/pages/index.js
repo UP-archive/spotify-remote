@@ -90,7 +90,10 @@ function IndexPage(session) {
       .playerDetailed .detailed h4,
       .playerDetailed .detailed div {
         margin: 0;
-        padding: 0;
+        padding: 0 1rem;
+        max-width: 90%;
+        margin: auto 0;
+        word-wrap: break-word;
       }
 
       .controller {
@@ -170,6 +173,7 @@ function IndexPage(session) {
         // Ready
         player.addListener("ready", ({ device_id }) => {
           console.log("Ready with Device ID", device_id);
+          localStorage.setItem("device_id", device_id);
           fetch("https://api.spotify.com/v1/me/player", {
             method: "PUT",
             headers: new Headers({
@@ -234,6 +238,18 @@ function IndexPage(session) {
           player.seek(document.querySelector("#durationBar").value);
         };
 
+        function playToggle() {
+          player.togglePlay();
+        }
+
+        function prev() {
+          player.previousTrack();
+        }
+
+        function next() {
+          player.nextTrack();
+        }
+
         player.on("player_state_changed", (state) => {
           const playlist =
             state.context.metadata.context_description !== undefined
@@ -279,20 +295,68 @@ function IndexPage(session) {
 
       const socket = io();
 
-      socket.on("spotify_play", (arg, callback) => {
-        player.togglePlay();
-        callback('Toggle playing state')
+      socket.on("controller", (state) => {
+        if (state == "play") {
+          fetch("https://api.spotify.com/v1/me/player", {
+            headers: new Headers({
+              "Content-Type": "application/json; charset=UTF-8",
+              Authorization: "Bearer ${session}",
+            }),
+          })
+            .then((resp) => resp.json())
+            .then((resp) => {
+              if (resp.is_playing) {
+                fetch(
+                  "https://api.spotify.com/v1/me/player/pause?device_id=" +
+                    localStorage.getItem("device_id"),
+                  {
+                    method: "PUT",
+                    headers: new Headers({
+                      "Content-Type": "application/json; charset=UTF-8",
+                      Authorization: "Bearer ${session}",
+                    }),
+                  }
+                );
+              } else {
+                fetch(
+                  "https://api.spotify.com/v1/me/player/play?device_id=" +
+                    localStorage.getItem("device_id"),
+                  {
+                    method: "PUT",
+                    headers: new Headers({
+                      "Content-Type": "application/json; charset=UTF-8",
+                      Authorization: "Bearer ${session}",
+                    }),
+                  }
+                );
+              }
+            });
+        } else if (state == "prev") {
+          fetch(
+            "https://api.spotify.com/v1/me/player/previous?device_id=" +
+              localStorage.getItem("device_id"),
+            {
+              method: "POST",
+              headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: "Bearer ${session}",
+              }),
+            }
+          );
+        } else if (state == "next") {
+          fetch(
+            "https://api.spotify.com/v1/me/player/next?device_id=" +
+              localStorage.getItem("device_id"),
+            {
+              method: "POST",
+              headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+                Authorization: "Bearer ${session}",
+              }),
+            }
+          );
+        }
       });
-
-      socket.on('spotify_prev', (arg, callback) => {
-        player.previousTrack()
-        callback('Previous track')
-      })
-
-      socket.on('spotify_next', (arg, callback) => {
-        player.nextTrack()
-        callback('Next track')
-      })
     </script>
   </body>
 </html>

@@ -1,6 +1,9 @@
 const { AuthIn, AuthCallback } = require('./auth')
 const sAPI = require('./client')
 const DateLine = require('../date')
+const spt_Play = require('../../pages/api/socket/play')
+const spt_Prev = require('../../pages/api/socket/prev')
+const spt_Next = require('../../pages/api/socket/next')
 
 async function SpotifyMain(app, root, io) {
   // Auth
@@ -17,41 +20,20 @@ async function SpotifyMain(app, root, io) {
     res.redirect('/')
   })
 
-  // // Play
-  // app.get('/api/controller/play', async (req, res) => {
-  //   io.timeout(5000).emit('spotify_play', (err, response) => {
-  //     if (err) {
-  //       console.log(err)
-  //     } else {
-  //       console.log(`| ${DateLine} -- ${response}`)
-  //       res.send(response)
-  //     }
-  //   })
-  // })
+  // Play
+  app.get('/api/controller/play', async (req, res) => {
+    res.send(spt_Play)
+  })
 
-  // // Previous
-  // app.get('/api/controller/prev', async (req, res) => {
-  //   io.timeout(5000).emit('spotify_prev', (err, response) => {
-  //     if (err) {
-  //       console.log(err)
-  //     } else {
-  //       console.log(`| ${DateLine} -- ${response}`)
-  //       res.send(response)
-  //     }
-  //   })
-  // })
+  // Next
+  app.get('/api/controller/next', async (req, res) => {
+    res.send(spt_Next)
+  })
 
-  // // Next
-  // app.get('/api/controller/next', async (req, res) => {
-  //   io.timeout(5000).emit('spotify_next', (err, response) => {
-  //     if (err) {
-  //       console.log(err)
-  //     } else {
-  //       console.log(`| ${DateLine} -- ${response}`)
-  //       res.send(response)
-  //     }
-  //   })
-  // })
+  // Prev
+  app.get('/api/controller/prev', async (req, res) => {
+    res.send(spt_Prev)
+  })
 }
 
 module.exports = SpotifyMain

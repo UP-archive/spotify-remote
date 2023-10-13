@@ -5,7 +5,17 @@ async function SocketWare(Server, server) {
 
   io.on('connection', (socket) => {
     console.log('')
-    console.log('| Socket connected -- ' + DateLine)
+    console.log('| User connected -- ' + DateLine)
+
+    socket.on('disconnect', () => {
+      console.log('')
+      console.log('| User Disconnected -- ' + DateLine)
+    })
+
+    socket.on('controller', (state) => {
+      console.log(`| ${DateLine} -- ${state}`)
+      io.emit('controller', state)
+    })
   })
 }
 
