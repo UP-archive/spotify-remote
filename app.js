@@ -9,8 +9,7 @@ const Serve = require('./src/serve')
 const Middleware = require('./src/middleware')
 const SocketWare = require('./src/socket')
 
-SocketWare(Server, http)
-
 Middleware(app, exp)
-Routes(app, __dirname, SocketWare)
+Routes(app, __dirname)
+SocketWare(Server, http, app)
 Serve(http)
