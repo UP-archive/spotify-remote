@@ -18,28 +18,17 @@ async function SocketWare(Server, server, app) {
     })
   })
 
-  app.post('/api/controller/play', async (req, res) => {
-    io.emit('controller', 'play')
+  app.post('/api/controller/:slug', async (req, res) => {
+    const state = req.params.slug
+
+    io.emit('controller', state)
+    console.log('| socket send command "' + state + '" -- ' + DateLine)
 
     res.send({
-      msg: `State: Play Toggle Send!`,
+      msg: `State: ${state} Send!`,
     })
-  })
 
-  app.post('/api/controller/next', async (req, res) => {
-    io.emit('controller', 'next')
-
-    res.send({
-      msg: `State: Next Send!`,
-    })
-  })
-
-  app.post('/api/controller/prev', async (req, res) => {
-    io.emit('controller', 'prev')
-
-    res.send({
-      msg: `State: Previous Send!`,
-    })
+    console.log(state)
   })
 }
 
