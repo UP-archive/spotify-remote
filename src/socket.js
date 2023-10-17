@@ -27,8 +27,6 @@ async function SocketWare(Server, server, app) {
     res.send({
       msg: `State: ${state} Send!`,
     })
-
-    console.log(state)
   })
 }
 
